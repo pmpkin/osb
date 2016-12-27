@@ -1,0 +1,34 @@
+{
+  "name": "node-osb-cli",
+  "version": "0.0.1",
+  "description": "Simple CLI tool to upload files to SoftLayer object storage",
+  "keywords": ["softlayer", "object storage", "backup"],
+  "main": "dist/osb.js",
+  "bin": {
+    "osb": "./dist/osb.js"
+  },
+  "scripts": {
+    "dev": "babel src --out-dir dist --watch",
+    "build": "babel src --out-dir dist",
+    "pre-publish": "npm run build"
+  },
+  "author": {
+      "name": "Michael Wibmer",
+      "email": "michael@pmpkin.com",
+      "url": "https://branded.me/wmichi"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.4.7",
+    "chalk": "^1.1.3",
+    "commander": "^2.9.0",
+    "progress": "^1.1.8",
+    "request": "^2.79.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "nodemon": "^1.11.0"
+  }
+}
