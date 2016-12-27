@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "babel src --out-dir dist --watch",
     "build": "babel src --out-dir dist",
-    "pre-publish": "npm run build"
+    "prepublish": "npm run build"
   },
   "author": {
       "name": "Michael Wibmer",
