@@ -3,19 +3,23 @@ import request from 'request';
 import fs from 'fs';
 const ProgressBar = require('progress');
 
-export default (storage, container, filename, ttl) => {
+
+const upload = (storage, container, sourcePath, filename, ttl) => {
     return new Promise((resolve, reject) => {
         const filepath = container ? `${container}/${filename}` : `${filename}`;
         const objectPath = `${storage.path}/${filepath}`;
-        const stat =  fs.statSync(filename);
+
+        const localFilePath = sourcePath ? `${sourcePath}/filename` : filename;
+        const stat =  fs.statSync(localFilePath);
 
         const headers = {
             'Content-Length': stat.size,
             "X-Auth-Token": storage.token
         };
-        if (ttl) headers['X-Delete-After'] = ttl;
+        let validatedFilePath = filepath;
 
-        const file = fs.createReadStream(filename)
+        if (ttl) headers['X-Delete-After'] = ttl;
+        const file = fs.createReadStream(localFilePath)
         console.log(`Uploading ${filename} to container ${container}...`);
         file.pipe(request.put({ url: objectPath, headers }, function(err, res, body){
                 if (res.statusCode === 408) return reject ('The request timed out.')
@@ -24,4 +28,15 @@ export default (storage, container, filename, ttl) => {
                 return resolve();
             }));
         });
+}
+
+export default (storage, container, sourcePath, ttl) => {
+    const stats = fs.statSync(sourcePath);
+    if (stats.isDirectory()) {
+        const filenames = fs.readdirSync(sourcePath)
+        return Promise.all(filenames.map(filename => {
+            return upload(storage, container, sourcePath, filename, ttl);
+        }));
+    }
+    return upload(storage, container, '', sourcePath, ttl);
 }

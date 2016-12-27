@@ -20,19 +20,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var ProgressBar = require('progress');
 
-exports.default = function (storage, container, filename, ttl) {
+var upload = function upload(storage, container, sourcePath, filename, ttl) {
     return new _bluebird2.default(function (resolve, reject) {
         var filepath = container ? container + '/' + filename : '' + filename;
         var objectPath = storage.path + '/' + filepath;
-        var stat = _fs2.default.statSync(filename);
+
+        var localFilePath = sourcePath ? sourcePath + '/filename' : filename;
+        var stat = _fs2.default.statSync(localFilePath);
 
         var headers = {
             'Content-Length': stat.size,
             "X-Auth-Token": storage.token
         };
-        if (ttl) headers['X-Delete-After'] = ttl;
+        var validatedFilePath = filepath;
 
-        var file = _fs2.default.createReadStream(filename);
+        if (ttl) headers['X-Delete-After'] = ttl;
+        var file = _fs2.default.createReadStream(localFilePath);
         console.log('Uploading ' + filename + ' to container ' + container + '...');
         file.pipe(_request2.default.put({ url: objectPath, headers: headers }, function (err, res, body) {
             if (res.statusCode === 408) return reject('The request timed out.');
@@ -41,4 +44,15 @@ exports.default = function (storage, container, filename, ttl) {
             return resolve();
         }));
     });
+};
+
+exports.default = function (storage, container, sourcePath, ttl) {
+    var stats = _fs2.default.statSync(sourcePath);
+    if (stats.isDirectory()) {
+        var filenames = _fs2.default.readdirSync(sourcePath);
+        return _bluebird2.default.all(filenames.map(function (filename) {
+            return upload(storage, container, sourcePath, filename, ttl);
+        }));
+    }
+    return upload(storage, container, '', sourcePath, ttl);
 };

@@ -7,4 +7,4 @@ var _commander2 = _interopRequireDefault(_commander);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_commander2.default.version(require('../package.json').version).command('upload [filename]', 'Upload file to object storage').parse(process.argv);
+_commander2.default.version(require('../package.json').version).command('upload [path]', 'Upload a file or contents of a directory to object storage').parse(process.argv);

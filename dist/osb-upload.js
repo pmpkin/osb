@@ -47,14 +47,14 @@ var validateArguments = function validateArguments(fileName, _ref) {
     }
 };
 
-var validateFileExists = function validateFileExists(fileName) {
-    if (!_fs2.default.existsSync(fileName)) {
-        console.log('\r\nFile "' + fileName + '" not found.\r\n');
+var validatePathExists = function validatePathExists(sourcePath) {
+    if (!_fs2.default.existsSync(sourcePath)) {
+        console.log('\r\nPath "' + sourcePath + '" not found.\r\n');
         process.exit(1);
     }
 };
 
-var uploadFile = function uploadFile(filename, region) {
+var uploadFile = function uploadFile(sourcePath, region) {
     var container = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
     var username = arguments[3];
     var password = arguments[4];
@@ -62,20 +62,20 @@ var uploadFile = function uploadFile(filename, region) {
 
 
     (0, _connect2.default)(username, password, region).then(function (storage) {
-        return (0, _upload2.default)(storage, container, filename, ttl);
+        return (0, _upload2.default)(storage, container, sourcePath, ttl);
     }).then(function () {
-        console.log('File ' + filename + ' successfully uploaded.');
+        console.log('Upload successfully finished.');
         process.exit(0);
     }).catch(function (error) {
-        console.log('Upload for file ' + filename + ' failed: ', error);
+        console.log('Upload failed: ', error);
         process.exit(1);
     });
 };
 
-_commander2.default.option('-c, --container [container]', 'The target container (required)').option('-p, --password [password]', 'Your password (API key, required)').option('-r, --region [region]', 'The region, for example fra02 (required)').option('-t, --ttl [ttl]', 'The time to live of the uploaded file (in seconds, optional)').option('-u, --user [user]', 'Your username (required)').action(function (fileName) {
-    validateFileExists(fileName);
-    validateArguments(fileName, _commander2.default);
-    uploadFile(fileName, _commander2.default.region, _commander2.default.container, _commander2.default.user, _commander2.default.password, _commander2.default.ttl);
+_commander2.default.option('-c, --container [container]', 'The target container (required)').option('-p, --password [password]', 'Your password (API key, required)').option('-r, --region [region]', 'The region, for example fra02 (required)').option('-t, --ttl [ttl]', 'The time to live of the uploaded file (in seconds, optional)').option('-u, --user [user]', 'Your username (required)').action(function (sourcePath) {
+    validatePathExists(sourcePath);
+    validateArguments(sourcePath, _commander2.default);
+    uploadFile(sourcePath, _commander2.default.region, _commander2.default.container, _commander2.default.user, _commander2.default.password, _commander2.default.ttl);
 });
 
 _commander2.default.parse(process.argv);

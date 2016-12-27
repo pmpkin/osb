@@ -19,23 +19,23 @@ const validateArguments = (fileName, { container, user, password, region} ) => {
     }
 }
 
-const validateFileExists = (fileName) => {
-    if (!fs.existsSync(fileName)) {
-        console.log(`\r\nFile "${fileName}" not found.\r\n`);
+const validatePathExists = (sourcePath) => {
+    if (!fs.existsSync(sourcePath)) {
+        console.log(`\r\nPath "${sourcePath}" not found.\r\n`);
         process.exit(1);
     }
 }
 
-const uploadFile = (filename, region, container = '', username, password, ttl) => {
+const uploadFile = (sourcePath, region, container = '', username, password, ttl) => {
 
     connect(username, password, region)
-        .then(storage => upload(storage, container, filename, ttl))
+        .then(storage => upload(storage, container, sourcePath, ttl))
         .then(() => {
-            console.log(`File ${filename} successfully uploaded.`);
+            console.log(`Upload successfully finished.`);
             process.exit(0);
         })
         .catch(error => {
-            console.log(`Upload for file ${filename} failed: `, error);
+            console.log(`Upload failed: `, error);
             process.exit(1);
         })
 }
@@ -46,10 +46,10 @@ subCommand
     .option('-r, --region [region]', 'The region, for example fra02 (required)')
     .option('-t, --ttl [ttl]', 'The time to live of the uploaded file (in seconds, optional)')
     .option('-u, --user [user]', 'Your username (required)')
-    .action(fileName => {
-        validateFileExists(fileName)
-        validateArguments(fileName, subCommand);
-        uploadFile(fileName, subCommand.region, subCommand.container, subCommand.user, subCommand.password, subCommand.ttl);
+    .action(sourcePath => {
+        validatePathExists(sourcePath)
+        validateArguments(sourcePath, subCommand);
+        uploadFile(sourcePath, subCommand.region, subCommand.container, subCommand.user, subCommand.password, subCommand.ttl);
 
     });
 

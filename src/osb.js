@@ -3,5 +3,5 @@ import program from 'commander';
 
 program
     .version(require('../package.json').version)
-    .command('upload [filename]', 'Upload file to object storage')
+    .command('upload [path]', 'Upload a file or contents of a directory to object storage')
     .parse(process.argv);
