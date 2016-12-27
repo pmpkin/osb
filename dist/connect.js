@@ -19,8 +19,10 @@ var endpoints = {
     public: '.objectstorage.softlayer.net/auth/v1.0/'
 };
 
-exports.default = function (username, password, region, privateNetwork) {
-    console.log('Connecting to object storage, region ', region, '.');
+exports.default = function (username, password, region, network) {
+    console.log('Connecting to object storage, region ' + region);
+    var privateNetwork = network === 'private';
+    console.log('https://' + region + (privateNetwork ? endpoints.private : endpoints.public));
     return new _bluebird2.default(function (resolve, reject) {
         _request2.default.get({ url: 'https://' + region + (privateNetwork ? endpoints.private : endpoints.public), headers: { "X-Auth-Key": password, "X-Auth-User": username } }, function (err, res) {
 

@@ -26,9 +26,9 @@ const validatePathExists = (sourcePath) => {
     }
 }
 
-const uploadFile = (sourcePath, region, container = '', username, password, ttl) => {
+const uploadFile = (sourcePath, region, container = '', username, password, ttl, network) => {
 
-    connect(username, password, region)
+    connect(username, password, region, network) 
         .then(storage => upload(storage, container, sourcePath, ttl))
         .then(() => {
             console.log(`Upload successfully finished.`);
@@ -46,10 +46,11 @@ subCommand
     .option('-r, --region [region]', 'The region, for example fra02 (required)')
     .option('-t, --ttl [ttl]', 'The time to live of the uploaded file (in seconds, optional)')
     .option('-u, --user [user]', 'Your username (required)')
+    .option('-n, --network [network]', 'Use public or private network for upload (defaults to public)', 'public')
     .action(sourcePath => {
         validatePathExists(sourcePath)
         validateArguments(sourcePath, subCommand);
-        uploadFile(sourcePath, subCommand.region, subCommand.container, subCommand.user, subCommand.password, subCommand.ttl);
+        uploadFile(sourcePath, subCommand.region, subCommand.container, subCommand.user, subCommand.password, subCommand.ttl, subCommand.network);
 
     });
 
