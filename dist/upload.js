@@ -25,7 +25,7 @@ var upload = function upload(storage, container, sourcePath, filename, ttl) {
         var filepath = container ? container + '/' + filename : '' + filename;
         var objectPath = storage.path + '/' + filepath;
 
-        var localFilePath = sourcePath ? sourcePath + '/filename' : filename;
+        var localFilePath = sourcePath ? sourcePath + '/' + filename : filename;
         var stat = _fs2.default.statSync(localFilePath);
 
         var headers = {

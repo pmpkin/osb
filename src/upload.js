@@ -9,7 +9,7 @@ const upload = (storage, container, sourcePath, filename, ttl) => {
         const filepath = container ? `${container}/${filename}` : `${filename}`;
         const objectPath = `${storage.path}/${filepath}`;
 
-        const localFilePath = sourcePath ? `${sourcePath}/filename` : filename;
+        const localFilePath = sourcePath ? `${sourcePath}/${filename}` : filename;
         const stat =  fs.statSync(localFilePath);
 
         const headers = {

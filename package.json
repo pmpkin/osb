@@ -1,6 +1,6 @@
 {
   "name": "node-osb-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Simple CLI tool to upload files to SoftLayer object storage",
   "keywords": ["softlayer", "object storage", "backup"],
   "main": "dist/osb.js",
