@@ -9,7 +9,6 @@ const endpoints = {
 export default (username, password, region, network) => {
     console.log(`Connecting to object storage, region ${region}`);
     const privateNetwork = network === 'private';
-    console.log(`https://${region}${privateNetwork ? endpoints.private : endpoints.public}`);
     return new Promise((resolve, reject) => {
         request.get({ url: `https://${region}${privateNetwork ? endpoints.private : endpoints.public}`, headers:{ "X-Auth-Key": password, "X-Auth-User": username }}, (err, res) => {
 

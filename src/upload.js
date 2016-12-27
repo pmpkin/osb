@@ -1,7 +1,6 @@
 import Promise from 'bluebird';
 import request from 'request';
 import fs from 'fs';
-const ProgressBar = require('progress');
 
 
 const upload = (storage, container, sourcePath, filename, ttl) => {

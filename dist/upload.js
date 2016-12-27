@@ -18,8 +18,6 @@ var _fs2 = _interopRequireDefault(_fs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var ProgressBar = require('progress');
-
 var upload = function upload(storage, container, sourcePath, filename, ttl) {
     return new _bluebird2.default(function (resolve, reject) {
         var filepath = container ? container + '/' + filename : '' + filename;

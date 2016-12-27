@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 
-var _commander = require('commander');
-
-var _commander2 = _interopRequireDefault(_commander);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _chalk = require('chalk');
 
@@ -12,10 +12,6 @@ var _chalk2 = _interopRequireDefault(_chalk);
 var _fs = require('fs');
 
 var _fs2 = _interopRequireDefault(_fs);
-
-var _request = require('request');
-
-var _request2 = _interopRequireDefault(_request);
 
 var _connect = require('./connect');
 
@@ -73,10 +69,8 @@ var uploadFile = function uploadFile(sourcePath, region) {
     });
 };
 
-_commander2.default.option('-c, --container [container]', 'The target container (required)').option('-p, --password [password]', 'Your password (API key, required)').option('-r, --region [region]', 'The region, for example fra02 (required)').option('-t, --ttl [ttl]', 'The time to live of the uploaded file (in seconds, optional)').option('-u, --user [user]', 'Your username (required)').option('-n, --network [network]', 'Use public or private network for upload (defaults to public)', 'public').action(function (sourcePath) {
+exports.default = function (sourcePath, options) {
     validatePathExists(sourcePath);
-    validateArguments(sourcePath, _commander2.default);
-    uploadFile(sourcePath, _commander2.default.region, _commander2.default.container, _commander2.default.user, _commander2.default.password, _commander2.default.ttl, _commander2.default.network);
-});
-
-_commander2.default.parse(process.argv);
+    validateArguments(sourcePath, options);
+    uploadFile(sourcePath, options.region, options.container, options.user, options.password, options.ttl, options.network);
+};

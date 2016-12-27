@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-import subCommand from 'commander';
+
 import chalk from 'chalk';
 import fs from 'fs';
-import request from 'request';
 import connect from './connect';
 import upload from './upload';
 
@@ -28,7 +27,7 @@ const validatePathExists = (sourcePath) => {
 
 const uploadFile = (sourcePath, region, container = '', username, password, ttl, network) => {
 
-    connect(username, password, region, network) 
+    connect(username, password, region, network)
         .then(storage => upload(storage, container, sourcePath, ttl))
         .then(() => {
             console.log(`Upload successfully finished.`);
@@ -40,18 +39,8 @@ const uploadFile = (sourcePath, region, container = '', username, password, ttl,
         })
 }
 
-subCommand
-    .option('-c, --container [container]', 'The target container (required)')
-    .option('-p, --password [password]', 'Your password (API key, required)')
-    .option('-r, --region [region]', 'The region, for example fra02 (required)')
-    .option('-t, --ttl [ttl]', 'The time to live of the uploaded file (in seconds, optional)')
-    .option('-u, --user [user]', 'Your username (required)')
-    .option('-n, --network [network]', 'Use public or private network for upload (defaults to public)', 'public')
-    .action(sourcePath => {
-        validatePathExists(sourcePath)
-        validateArguments(sourcePath, subCommand);
-        uploadFile(sourcePath, subCommand.region, subCommand.container, subCommand.user, subCommand.password, subCommand.ttl, subCommand.network);
-
-    });
-
-subCommand.parse(process.argv);
+export default (sourcePath, options) => {
+    validatePathExists(sourcePath);
+    validateArguments(sourcePath, options);
+    uploadFile(sourcePath, options.region, options.container, options.user, options.password, options.ttl, options.network);
+}
